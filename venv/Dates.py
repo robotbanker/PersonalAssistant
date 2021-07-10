@@ -16,6 +16,15 @@ days_of_week_code = {
               'Sunday': 6,
 }
 
+name_of_days = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+]
 coded_day_in_gym= []
 for day in days_in_gym:
     coded_day_in_gym.append(days_of_week_code[day])
@@ -28,6 +37,9 @@ for coded_day in coded_day_in_gym:
 
 next_day_to_book = datetime.now() + relativedelta(days=6)
 next_day_formatted = next_day_to_book.strftime("%d/%m/%Y")
+next_day_string = name_of_days[next_day_to_book.weekday()]
+
+
 if td in Days_for_booking:
     print(' I need to book today for ' + next_day_formatted)
     test = True
