@@ -2,9 +2,10 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from time import sleep
 from secrets import gym_username, gym_pwd
+from Dates import test, next_day_formatted
 
-booking_date= '16/07/2021'
-booking_activity = '08:45 Gym Slot Male'
+booking_date= next_day_formatted
+booking_activity = '08:15 Gym Slot Male'
 
 class PersonalAssistant():
     driver = webdriver.Chrome()
@@ -52,8 +53,6 @@ class PersonalAssistant():
         search_btn=self.driver.find_elements_by_xpath(search)
         search_btn[0].click()
 
-#so far so good
-
         sleep(3)
         slot_815 = '//*[@id="ctl00_MainContent__advanceSearchResultsUserControl_Classes_ctrl0_lnkActivitySelect_lg"]'
         slot_815_btn = self.driver.find_elements_by_xpath(slot_815)
@@ -70,7 +69,22 @@ class PersonalAssistant():
         complete_btn[0].click()
 
 
-run = PersonalAssistant()
+if test == True:
+    try:
+        run = PersonalAssistant()
+        run.login()
+        run.select_activity()
+        prefix = 'I booked the gym for you on '
+        message = prefix + next_day_formatted + '.'
+        print(message)
 
-run.login()
-run.select_activity()
+    except Exception:
+        print ('First excution failed, I will try again...')
+        run = PersonalAssistant()
+        run.login()
+        run.select_activity()
+else:
+    message = 'No booking is required today'
+    PersonalAssistant().driver.close()
+
+
