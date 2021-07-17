@@ -2,8 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from time import sleep
 from secrets import gym_username, gym_pwd
-from Dates import test, next_day_formatted, next_day_string
-
+from Dates import test, next_day_formatted, next_day_string,next_day_javaformat
 from Messanger import mail_sender
 
 booking_date= next_day_formatted
@@ -41,12 +40,10 @@ class PersonalAssistant():
         activity_bar[0].send_keys(Keys.ENTER)
 
 
-        from_date= '//*[@id="ctl00_MainContent__advanceSearchUserControl_startDate"]'
-        from_date_bx = self.driver.find_elements_by_xpath(from_date)
-        from_date_bx[0].send_keys(booking_date)
-        to_date = r'//*[@id="ctl00_MainContent__advanceSearchUserControl_endDate"]'
-        to_date_bx = self.driver.find_elements_by_xpath(to_date)
-        to_date_bx[0].send_keys(booking_date)
+        from_date_id= 'ctl00_MainContent__advanceSearchUserControl_startDate'
+        self.driver.execute_script(f"document.getElementById('ctl00_MainContent__advanceSearchUserControl_startDate').value = '{next_day_javaformat}'")
+        sleep(1)
+        self.driver.execute_script(f"document.getElementById('ctl00_MainContent__advanceSearchUserControl_endDate').value = '{next_day_javaformat}'")
 
         #search for activity selected:
         search= r'//*[@id="ctl00_MainContent__advanceSearchUserControl__searchBtn"]'
