@@ -3,7 +3,6 @@ from selenium.webdriver.common.keys import Keys
 from time import sleep
 from secrets import gym_username, gym_pwd
 from Dates import test, next_day_formatted, next_day_string, next_day_javaformat
-
 from Messanger import mail_sender
 
 booking_activity = '08:15 Gym Slot Male'
@@ -29,7 +28,6 @@ class PersonalAssistant():
     def login(self):
         self.driver.get('https://nuffieldhealthfcl.leisurecloud.net/Connect/memberHomePage.aspx')
         sleep (3)
-        self.driver.get_screenshot_as_file('login_page.png')
         email_box= self.driver.find_elements_by_xpath('//*[@id="ctl00_MainContent_InputLogin"]')
         email_box[0].send_keys(gym_username)
         pwd_form= self.driver.find_elements_by_xpath('//*[@id="ctl00_MainContent_InputPassword"]')
@@ -40,35 +38,30 @@ class PersonalAssistant():
         sleep (3)
         scroll_btn = self.driver.find_elements_by_xpath('//*[@id="search-panels"]/div[2]/div[1]/h3/span/i')
         scroll_btn[0].click()
-        self.driver.get_screenshot_as_file('select_activity.png')
         sleep (3)
         activity_btn = self.driver.find_elements_by_xpath('//*[@id="ctl00_MainContent__advanceSearchUserControl_ActivityGroups"]')
         activity_btn[0].send_keys('Gym + Changing Room')
         activity_btn[0].send_keys(Keys.TAB)
-        self.driver.get_screenshot_as_file('select_activity_Gym.png')
+
         sleep (3)
         #click search acrtivity bar:
         activity_bar_target= r'//*[@id="ctl00_MainContent__advanceSearchUserControl_Activities"]'
         activity_bar= self.driver.find_elements_by_xpath(activity_bar_target)
         activity_bar[0].click()
-        self.driver.get_screenshot_as_file('select_activity_bar.png')
         # enter activity you wanna book
         activity_bar[0].send_keys(booking_activity)
         activity_bar[0].send_keys(Keys.ENTER)
-        self.driver.get_screenshot_as_file('select_activity_bar_selected.png')
 
         sleep(3)
         from_date_id = 'ctl00_MainContent__advanceSearchUserControl_startDate'
         self.driver.execute_script(f"document.getElementById('ctl00_MainContent__advanceSearchUserControl_startDate').value = '{next_day_javaformat}'")
         sleep(1)
         self.driver.execute_script(f"document.getElementById('ctl00_MainContent__advanceSearchUserControl_endDate').value = '{next_day_javaformat}'")
-        self.driver.get_screenshot_as_file('select_date_to.png')
 
         #search for activity selected:
         search= r'//*[@id="ctl00_MainContent__advanceSearchUserControl__searchBtn"]'
         search_btn=self.driver.find_elements_by_xpath(search)
         search_btn[0].click()
-        self.driver.get_screenshot_as_file('search_selected.png')
 
         sleep(3)
         slot_815 = '//*[@id="ctl00_MainContent__advanceSearchResultsUserControl_Classes_ctrl0_lnkActivitySelect_lg"]'
@@ -84,7 +77,6 @@ class PersonalAssistant():
         complete = '//*[@id="ctl00_MainContent_btnBasket"]'
         complete_btn = self.driver.find_elements_by_xpath(complete)
         complete_btn[0].click()
-
 
 if test == True:
     try:
