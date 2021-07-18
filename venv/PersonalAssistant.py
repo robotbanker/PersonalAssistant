@@ -1,3 +1,5 @@
+import time
+import schedule
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from time import sleep
@@ -66,78 +68,84 @@ class PersonalAssistant():
         complete_btn[0].click()
 
 
-if test == True:
-    try:
-        run = PersonalAssistant()
-        run.login()
-        run.select_activity()
-        subject = 'Gym booked for ' f'{next_day_string}' + f' {next_day_formatted}'
-        message = f"""\
+def bot (next_day_string):
+    if test == True:
+        try:
+            run = PersonalAssistant()
+            run.login()
+            run.select_activity()
+            subject = 'Gym booked for ' f'{next_day_string}' + f' {next_day_formatted}'
+            message = f"""\
+            <html>
+              <body>
+                <p>Hi, Davide,<br> <br> 
+                   I'm happy to confirm that I booked the gym for you on <b>{next_day_string}  {next_day_formatted}</b>.<br>
+                   <br>
+                   Have a great day &#10084;&#65039 <br>
+                   Samantha <br> xx
+                </p>
+              </body>
+            </html>
+            """
+            print('gym successfully booked')
+
+        except Exception:
+            try:
+                print ('First excution failed, I will try again...')
+                run = PersonalAssistant()
+                run.login()
+                run.select_activity()
+                subject = f'Your booking confirmation: Failed to book for ' f'{next_day_string}' + f' {next_day_formatted}'
+                message = f"""\
+                        <html>
+                          <body>
+                            <p>Hi, Davide,<br> <br> 
+                               I'm happy to confirm that I booked the gym for you on <b>{next_day_string}  {next_day_formatted}</b>.<br>
+                               Just as an FYI, today the website didn't respond on the first attempt.
+                               <br><br>
+                               Have a great day &#10084;&#65039 <br>
+                               Samantha <br> xx
+                            </p>
+                          </body>
+                        </html>
+                        """
+            except Exception:
+                print('both booking attepmts failed. Sending disappointing email...')
+                subject = f'Failed to book for ' f'{next_day_string}' + f' {next_day_formatted}'
+                message = f"""\
+                                <html>
+                                  <body>
+                                    <p>Hi Davide,<br> <br> 
+                                       I tried to book the gym for you on <b>{next_day_string}  {next_day_formatted}</b>.<br>
+                                       Unfortunately the website failed to respond on both first and second attempt.
+                                       <br><br>
+                                       I hope this won't ruin your day &#10084;&#65039 <br>
+                                       Samantha <br>
+                                    </p>
+                                  </body>
+                                </html>
+                                """
+    else:
+        subject = 'No booking is required today'
+        message = """\
         <html>
           <body>
             <p>Hi, Davide,<br> <br> 
-               I'm happy to confirm that I booked the gym for you on <b>{next_day_string}  {next_day_formatted}</b>.<br>
-               <br>
-               Have a great day &#10084;&#65039 <br>
+               I checked your agenda and no booking is required for your upcoming session.
+               <br><br>
+               Have a great day, <br>
                Samantha <br> xx
             </p>
           </body>
         </html>
         """
-        print('gym successfully booked')
+        PersonalAssistant().driver.close()
 
-    except Exception:
-        try:
-            print ('First excution failed, I will try again...')
-            run = PersonalAssistant()
-            run.login()
-            run.select_activity()
-            subject = f'Your booking confirmation: Failed to book for ' f'{next_day_string}' + f' {next_day_formatted}'
-            message = f"""\
-                    <html>
-                      <body>
-                        <p>Hi, Davide,<br> <br> 
-                           I'm happy to confirm that I booked the gym for you on <b>{next_day_string}  {next_day_formatted}</b>.<br>
-                           Just as an FYI, today the website didn't respond on the first attempt.
-                           <br><br>
-                           Have a great day &#10084;&#65039 <br>
-                           Samantha <br> xx
-                        </p>
-                      </body>
-                    </html>
-                    """
-        except Exception:
-            print('both booking attepmts failed. Sending disappointing email...')
-            subject = f'Failed to book for ' f'{next_day_string}' + f' {next_day_formatted}'
-            message = f"""\
-                            <html>
-                              <body>
-                                <p>Hi Davide,<br> <br> 
-                                   I tried to book the gym for you on <b>{next_day_string}  {next_day_formatted}</b>.<br>
-                                   Unfortunately the website failed to respond on both first and second attempt.
-                                   <br><br>
-                                   I hope this won't ruin your day &#10084;&#65039 <br>
-                                   Samantha <br>
-                                </p>
-                              </body>
-                            </html>
-                            """
-else:
-    subject = 'No booking is required today'
-    message = """\
-    <html>
-      <body>
-        <p>Hi, Davide,<br> <br> 
-           I checked your agenda and no booking is required for your upcoming session.
-           <br><br>
-           Have a great day, <br>
-           Samantha <br> xx
-        </p>
-      </body>
-    </html>
-    """
-    PersonalAssistant().driver.close()
+    mail_sender(text= message,mail_subject= subject )
 
-mail_sender(text= message,mail_subject= subject )
+schedule.every().day.at("21:22").do(bot)
 
+while 1:
+    schedule.run_pending()
+    time.sleep(1)
 

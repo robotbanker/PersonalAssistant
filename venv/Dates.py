@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 
 td= datetime.today().weekday()
 
-days_in_gym = ['Monday','Wednesday','Friday','Tuesday']
+days_in_gym = ['Monday','Wednesday','Friday','Tuesday','Saturday']
 
 days_of_week_code = {
               'Monday': 0 ,
